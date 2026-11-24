@@ -156,7 +156,7 @@
   }
 }
 
-@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+@media (scripting: enabled) {
   .plane-poster {
     display: none;
   }
