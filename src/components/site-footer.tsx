@@ -1,6 +1,6 @@
 import { destinations, heroPhoto } from "@/content/destinations";
 import { navigation, site } from "@/lib/site";
-import { VoyraMark } from "./icons";
+import { AlvireyaLogo } from "./brand";
 
 const credits = [
   { place: "Hero coastline", credit: heroPhoto.credit },
@@ -13,16 +13,15 @@ export function SiteFooter() {
       <div className="mx-auto max-w-[1440px] px-5 pt-20 pb-10 md:px-10">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <p className="flex items-center gap-2">
-              <VoyraMark className="h-7 w-7" />
-              <span className="font-display text-2xl tracking-[0.18em]">VOYRA</span>
+            <p>
+              <AlvireyaLogo size="lg" />
             </p>
             <p className="mt-5 max-w-sm text-[0.95rem] leading-relaxed text-paper/70">
               A travel experience concept by{" "}
               <a href={site.studio.url} className="text-paper underline decoration-gold/60 underline-offset-4 hover:decoration-gold">
                 WebbingHUB
               </a>
-              . VOYRA is not a travel agency and does not sell travel. Destinations are real; hotels,
+              . ALVIREYA is not a travel agency and does not sell travel. Destinations are real; hotels,
               itineraries and prices are fictional examples.
             </p>
           </div>
@@ -63,7 +62,7 @@ export function SiteFooter() {
 
         <div className="mt-16 flex flex-col gap-3 border-t border-paper/15 pt-6 text-[0.8rem] text-paper/50 sm:flex-row sm:justify-between">
           <p>© 2026 WebbingHUB. Concept work.</p>
-          <p>voyra.webbinghub.io</p>
+          <p>alvireya.webbinghub.io</p>
         </div>
       </div>
     </footer>

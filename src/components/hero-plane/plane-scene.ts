@@ -30,7 +30,7 @@ export type PlaneScene = {
   dispose: () => void;
 };
 
-const MODEL_URL = "/models/voyra-plane.glb";
+const MODEL_URL = "/models/alvireya-plane.glb";
 const MODEL_LENGTH = 0.62;
 const FOV = 28;
 const ARRIVAL_MS = 2600;

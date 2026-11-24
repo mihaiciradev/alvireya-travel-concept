@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: site.url,
-    siteName: "VOYRA by WebbingHUB",
+    siteName: "ALVIREYA by WebbingHUB",
     title: site.title,
     description: site.description,
     locale: "en_US",

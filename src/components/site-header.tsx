@@ -1,14 +1,13 @@
 import { navigation } from "@/lib/site";
-import { VoyraMark } from "./icons";
+import { AlvireyaLogo } from "./brand";
 import { MobileNav } from "./mobile-nav";
 
 export function SiteHeader() {
   return (
     <header className="site-header fixed inset-x-0 top-0 z-50">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:h-[4.5rem] md:px-10">
-        <a href="#top" className="flex items-center gap-2 text-ink" aria-label="VOYRA, back to top">
-          <VoyraMark className="h-6 w-6" />
-          <span className="font-display text-[1.35rem] font-medium tracking-[0.18em]">VOYRA</span>
+        <a href="#top" className="text-ink" aria-label="ALVIREYA, back to top">
+          <AlvireyaLogo />
         </a>
 
         <nav aria-label="Main" className="hidden lg:block">

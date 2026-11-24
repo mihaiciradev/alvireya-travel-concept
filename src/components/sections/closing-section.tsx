@@ -23,7 +23,7 @@ export function ClosingSection() {
           </svg>
           <div className="reveal absolute -top-16 right-[-2%] w-[30%] max-w-[300px] min-w-[160px] md:-top-24 md:right-[2%]">
             <Image
-              src="/images/voyra-plane.webp"
+              src="/images/alvireya-plane.webp"
               alt=""
               width={640}
               height={480}
@@ -44,7 +44,7 @@ export function ClosingSection() {
         <div className="mt-14 grid gap-10 border-t border-ink/15 pt-10 lg:grid-cols-12">
           <div className="space-y-5 text-[1.08rem] leading-relaxed text-ink-soft lg:col-span-6">
             <p>
-              VOYRA is a concept. Its destinations are real places, but its hotels, prices and planner
+              ALVIREYA is a concept. Its destinations are real places, but its hotels, prices and planner
               are illustrations. The approach behind it is real.
             </p>
             <p>

@@ -11,7 +11,7 @@ const honesty = [
   },
   {
     title: "Simulated on this page",
-    body: "The planner logic, the hotels, the prices and the request form. VOYRA is not connected to any supplier, CRM or AI model.",
+    body: "The planner logic, the hotels, the prices and the request form. ALVIREYA is not connected to any supplier, CRM or AI model.",
   },
   {
     title: "What WebbingHUB builds",
@@ -28,7 +28,7 @@ export function BehindSection() {
       />
       <div className="relative mx-auto max-w-[1440px] px-5 py-24 md:px-10 md:py-36">
         <p className="eyebrow mb-10 inline-flex items-center gap-2 rounded-full border border-gold/40 px-3 py-1.5 text-[0.62rem] text-gold">
-          VOYRA is a concept by WebbingHUB
+          ALVIREYA is a concept by WebbingHUB
         </p>
         <SectionIntro
           tone="dark"

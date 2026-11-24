@@ -13,8 +13,8 @@ export const ensureStatic = "navigation";
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "VOYRA",
-  alternateName: "VOYRA — A Travel Experience Concept by WebbingHUB",
+  name: "ALVIREYA",
+  alternateName: "ALVIREYA — A Travel Experience Concept by WebbingHUB",
   url: site.url,
   description: site.description,
   inLanguage: "en",

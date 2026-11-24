@@ -56,7 +56,7 @@ export function Hero() {
           </h1>
 
           <p className="hero-rise-late order-4 mt-7 max-w-[34rem] text-[1.02rem] leading-relaxed text-ink-soft md:text-[1.18rem]">
-            VOYRA plans journeys around a feeling first and a destination second, then takes care of
+            ALVIREYA plans journeys around a feeling first and a destination second, then takes care of
             every detail between here and there.
           </p>
 
@@ -103,7 +103,7 @@ export function Hero() {
               data-plane-anchor
               className="absolute top-[6%] left-[-3%] w-[38%] max-w-[260px] md:top-[10%] md:w-[30%] lg:top-[30%] lg:left-[-30%] lg:w-[50%]"
             >
-              <div className="plane-poster aspect-[4/3] bg-[url(/images/voyra-plane.webp)] bg-contain bg-center bg-no-repeat" />
+              <div className="plane-poster aspect-[4/3] bg-[url(/images/alvireya-plane.webp)] bg-contain bg-center bg-no-repeat" />
             </div>
           </div>
           <p className="eyebrow mt-4 hidden text-center text-[0.62rem] text-ink-muted sm:block lg:mt-5 lg:text-right">

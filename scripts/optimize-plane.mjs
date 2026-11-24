@@ -13,7 +13,7 @@ import { MeshoptEncoder, MeshoptSimplifier } from "meshoptimizer";
 import { stat } from "node:fs/promises";
 
 const SOURCE = "src/raw/3dplane.glb";
-const TARGET = "public/models/voyra-plane.glb";
+const TARGET = "public/models/alvireya-plane.glb";
 
 await MeshoptEncoder.ready;
 await MeshoptSimplifier.ready;

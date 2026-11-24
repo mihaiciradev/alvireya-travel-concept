@@ -1,8 +1,8 @@
-# VOYRA
+# ALVIREYA
 
-A travel experience concept by [WebbingHUB](https://webbinghub.io), built for `voyra.webbinghub.io`.
+A travel experience concept by [WebbingHUB](https://webbinghub.io), built for `alvireya.webbinghub.io`.
 
-VOYRA is a fictional travel brand. Destinations are real places, but its hotels, prices, planner logic and request form are illustrations. Nothing on the page connects to a supplier, CRM or AI model.
+ALVIREYA is a fictional travel brand. Destinations are real places, but its hotels, prices, planner logic and request form are illustrations. Nothing on the page connects to a supplier, CRM or AI model.
 
 ## Running
 
@@ -19,6 +19,11 @@ Node 20.9+ is required by Next.js 16.
 - **Palette.** Warm paper ivory (`#f4eee3`), deep ink navy (`#10202f`) and the airplane's own sky blue (`#5fb3da`) form the brand. Sunlit coral (`#e2572b`) is reserved for action and the flight path. Muted gold (`#c9a46a`) only appears in the dark "behind the experience" layer. The combination reads as warm and human first, and technical second.
 - **Type.** Fraunces for editorial display, with italics carrying the emotional words. Geist for interface text, and Geist Mono for flight-data labels (coordinates, steps, boarding-pass details).
 - **Motif.** Aircraft windows, dashed flight paths and boarding-pass details. The playful 3D plane is deliberately set against real, editorial photography: a toy flying over a real coastline seen from above.
+
+## Brand
+
+- **Logo.** A monogram "A" whose crossbar is a rising flight route. It runs past the right leg and ends in a coral point, the destination. The monogram sits beside an ALVIREYA wordmark set in light Fraunces capitals with wide tracking. The lockup lives in `src/components/brand.tsx` and is used in the header, footer and share image.
+- **Favicon.** The same monogram, paper on an ink tile with a coral route, readable at 16 px on light and dark browser UI. Files: `src/app/icon.svg`, `src/app/apple-icon.png` (180 px), and `public/icons/` (192, 512 and maskable 512), wired through `src/app/manifest.ts`.
 
 ## Page structure
 
@@ -37,7 +42,7 @@ Content lives in `src/content`, pure logic in `src/lib`, and sections in `src/co
 
 The source model `src/raw/3dplane.glb` is 3.6 MB, with 71k triangles, 9 meshes, flat-colored materials, no textures and no animations. It is kept untouched.
 
-`node scripts/optimize-plane.mjs` writes `public/models/voyra-plane.glb`. That step drops the unused clearcoat and transmission extensions, welds and simplifies the geometry, then quantizes it with meshopt compression. The result is **123 KB with 13.6k triangles**, with no visible difference at hero size.
+`node scripts/optimize-plane.mjs` writes `public/models/alvireya-plane.glb`. That step drops the unused clearcoat and transmission extensions, welds and simplifies the geometry, then quantizes it with meshopt compression. The result is **123 KB with 13.6k triangles**, with no visible difference at hero size.
 
 Runtime behavior (`src/components/hero-plane`):
 
@@ -45,7 +50,7 @@ Runtime behavior (`src/components/hero-plane`):
 - The plane follows a curved path across the photo and settles at the window edge. A coral contrail draws in sync.
 - Rendering happens on demand only: during the arrival, then on pointer movement (fine pointers only) and on scroll while the hero is visible. Idle floating is a CSS transform on the canvas, so it costs no WebGL frames.
 - Device pixel ratio is capped (1.5 on desktop, 1.75 on mobile). The renderer uses `powerPreference: "low-power"`.
-- Reduced motion, Save-Data, no WebGL or no JavaScript all show a pre-rendered poster (`public/images/voyra-plane.webp`, 23 KB) instead, and three.js is never downloaded.
+- Reduced motion, Save-Data, no WebGL or no JavaScript all show a pre-rendered poster (`public/images/alvireya-plane.webp`, 23 KB) instead, and three.js is never downloaded.
 
 ## Images
 
@@ -70,6 +75,6 @@ Verified at 375, 768 and 1440 px wide, with no horizontal overflow. There are no
 
 ## Deployment notes
 
-- Canonical, sitemap and robots point to `https://voyra.webbinghub.io`.
+- Canonical, sitemap and robots point to `https://alvireya.webbinghub.io`.
 - `/models/*` and `/images/*` get long cache headers in `next.config.ts`. Rename the model file if it changes.
 - Consider linking to the concept from webbinghub.io once it is live.
