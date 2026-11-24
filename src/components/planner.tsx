@@ -14,6 +14,7 @@ import {
   type PlannerResult,
 } from "@/lib/planner";
 import { ArrowRight } from "./icons";
+import { PlannerMascot } from "./planner-mascot";
 
 const steps = ["Reading your preferences", "Matching four destinations", "Drafting the days"];
 const euro = new Intl.NumberFormat("en-IE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
@@ -62,15 +63,15 @@ export function Planner() {
     setStatus("thinking");
     setStep(0);
     timers.current = [
-      window.setTimeout(() => setStep(1), 450),
-      window.setTimeout(() => setStep(2), 900),
+      window.setTimeout(() => setStep(1), 550),
+      window.setTimeout(() => setStep(2), 1100),
       window.setTimeout(() => {
         setResult(next);
         setStatus("done");
         if (window.innerWidth < 1024) {
           resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-      }, 1350),
+      }, 1680),
     ];
   }
 
@@ -205,7 +206,8 @@ export function Planner() {
         </p>
       </form>
 
-      <div ref={resultRef} className="scroll-mt-24 lg:col-span-7">
+      <div ref={resultRef} className="relative mt-24 scroll-mt-36 lg:col-span-7 lg:mt-0">
+        <PlannerMascot status={status} />
         <div
           aria-live="polite"
           aria-busy={status === "thinking"}

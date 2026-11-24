@@ -20,7 +20,7 @@ export function PlannerSection() {
           questions, then a first draft your team can refine. Here it runs on simple, transparent
           rules so you can try it safely.
         </SectionIntro>
-        <div className="mt-14 md:mt-20">
+        <div className="mt-14 md:mt-28">
           <Planner />
         </div>
         <BuildNote className="mt-14 md:mt-20">

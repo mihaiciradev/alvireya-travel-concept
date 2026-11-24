@@ -14,7 +14,7 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "ALVIREYA",
-  alternateName: "ALVIREYA — A Travel Experience Concept by WebbingHUB",
+  alternateName: "ALVIREYA, a travel experience concept by WebbingHUB",
   url: site.url,
   description: site.description,
   inLanguage: "en",

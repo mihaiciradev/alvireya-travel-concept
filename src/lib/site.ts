@@ -1,7 +1,7 @@
 export const site = {
   name: "ALVIREYA",
   url: "https://alvireya.webbinghub.io",
-  title: "ALVIREYA — Future of Travel Agency Websites | WebbingHUB",
+  title: "ALVIREYA - Future of Travel Agency Websites | WebbingHUB",
   description:
     "Explore ALVIREYA, an interactive travel website concept by WebbingHUB, showcasing modern design, AI-assisted travel experiences, and connected booking workflows.",
   studio: {

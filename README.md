@@ -52,6 +52,8 @@ Runtime behavior (`src/components/hero-plane`):
 - Device pixel ratio is capped (1.5 on desktop, 1.75 on mobile). The renderer uses `powerPreference: "low-power"`.
 - With reduced motion, the single three-second arrival still plays, but pointer-follow, scroll drift, floating and drifting clouds are switched off. Save-Data, no WebGL or no JavaScript show a pre-rendered poster (`public/images/alvireya-plane.webp`, 23 KB) instead, and three.js is never downloaded.
 
+The same plane returns as the site's mascot in the planner (`src/components/planner-mascot.tsx`). It perches on the corner of the journey-sketch card, glides across while a sketch is drafted, and turns to face the result. It loads only when the planner is near the viewport, shares the rig in `plane-rig.ts`, and renders only while it moves. With reduced motion it stays perched.
+
 ## Images
 
 Photos come from Unsplash under the Unsplash License, credited in the footer. A custom `next/image` loader (`src/lib/image-loader.ts`) asks Unsplash's CDN for AVIF/WebP at the requested width. The hero uses `<picture>` art direction: a 16:10 crop on small screens, 3:4 on desktop, at high fetch priority.

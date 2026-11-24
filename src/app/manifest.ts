@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ALVIREYA — A Travel Experience Concept by WebbingHUB",
+    name: "ALVIREYA, a travel experience concept by WebbingHUB",
     short_name: site.name,
     description: site.description,
     start_url: "/",

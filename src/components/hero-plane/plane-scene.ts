@@ -1,21 +1,5 @@
-import {
-  ACESFilmicToneMapping,
-  Box3,
-  CanvasTexture,
-  DirectionalLight,
-  Group,
-  HemisphereLight,
-  Mesh,
-  MeshBasicMaterial,
-  PerspectiveCamera,
-  PlaneGeometry,
-  Scene,
-  SRGBColorSpace,
-  Vector3,
-  WebGLRenderer,
-} from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
+import { CanvasTexture, Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
+import { createPlaneRig, MODEL_LENGTH } from "./plane-rig";
 
 export type Point = { x: number; y: number };
 
@@ -34,9 +18,6 @@ export type PlaneScene = {
   dispose: () => void;
 };
 
-const MODEL_URL = "/models/alvireya-plane.glb";
-const MODEL_LENGTH = 0.62;
-const FOV = 28;
 const ARRIVAL_MS = 3000;
 const NOSE_UP = 0.2;
 
@@ -89,45 +70,8 @@ function shadowTexture() {
 }
 
 export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<PlaneScene> {
-  const renderer = new WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: true,
-    powerPreference: "low-power",
-  });
-  renderer.outputColorSpace = SRGBColorSpace;
-  renderer.toneMapping = ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-
-  const scene = new Scene();
-  scene.add(new HemisphereLight(0xfff4e2, 0xc9b495, 2.1));
-  const sun = new DirectionalLight(0xfff0dc, 2.6);
-  sun.position.set(-2, 4, 3);
-  scene.add(sun);
-  const rim = new DirectionalLight(0x9fd3ee, 1.1);
-  rim.position.set(3, -1, -2);
-  scene.add(rim);
-
-  const camera = new PerspectiveCamera(FOV, 1, 1, 10000);
-
-  const loader = new GLTFLoader();
-  loader.setMeshoptDecoder(MeshoptDecoder);
-  const gltf = await loader.loadAsync(MODEL_URL);
-
-  const model = gltf.scene;
-  const center = new Box3().setFromObject(model).getCenter(new Vector3());
-  model.position.sub(center);
-
-  const pose = new Group();
-  pose.rotation.set(0.45, -(Math.PI / 2 - 0.7), 0, "XYZ");
-  pose.add(model);
-
-  const bank = new Group();
-  bank.add(pose);
-
-  const flight = new Group();
-  flight.add(bank);
-  scene.add(flight);
+  const rig = await createPlaneRig(canvas);
+  const { scene, flight, bank } = rig;
 
   const shadowMap = shadowTexture();
   const shadowMaterial = new MeshBasicMaterial({
@@ -183,7 +127,7 @@ export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<Plane
 
   function render(now: number) {
     const busy = place(now);
-    renderer.render(scene, camera);
+    rig.render();
     return busy;
   }
 
@@ -209,12 +153,7 @@ export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<Plane
     layout(next) {
       stage = next;
       path = flightPath(stage);
-      const ratio = Math.min(window.devicePixelRatio || 1, next.width < 768 ? 1.75 : 1.5);
-      renderer.setPixelRatio(ratio);
-      renderer.setSize(next.width, next.height, false);
-      camera.aspect = next.width / next.height;
-      camera.position.set(0, 0, next.height / 2 / Math.tan((FOV * Math.PI) / 360));
-      camera.updateProjectionMatrix();
+      rig.resize(next.width, next.height, next.width < 768 ? 1.75 : 1.5);
       render(performance.now());
     },
     arrive(onProgress) {
@@ -248,8 +187,7 @@ export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<Plane
       cancelAnimationFrame(frame);
       shadowMap.dispose();
       shadowMaterial.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
+      rig.dispose();
     },
   };
 }
