@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VOYRA
 
-## Getting Started
+A travel experience concept by [WebbingHUB](https://webbinghub.io), built for `voyra.webbinghub.io`.
 
-First, run the development server:
+VOYRA is a fictional travel brand. Destinations are real places, but its hotels, prices, planner logic and request form are illustrations. Nothing on the page connects to a supplier, CRM or AI model.
+
+## Running
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build && npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Node 20.9+ is required by Next.js 16.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Creative direction
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Palette.** Warm paper ivory (`#f4eee3`), deep ink navy (`#10202f`) and the airplane's own sky blue (`#5fb3da`) form the brand. Sunlit coral (`#e2572b`) is reserved for action and the flight path. Muted gold (`#c9a46a`) only appears in the dark "behind the experience" layer. The combination reads as warm and human first, and technical second.
+- **Type.** Fraunces for editorial display, with italics carrying the emotional words. Geist for interface text, and Geist Mono for flight-data labels (coordinates, steps, boarding-pass details).
+- **Motif.** Aircraft windows, dashed flight paths and boarding-pass details. The playful 3D plane is deliberately set against real, editorial photography: a toy flying over a real coastline seen from above.
 
-## Learn More
+## Page structure
 
-To learn more about Next.js, take a look at the following resources:
+A single page, server-rendered, with five chapters and a conversion close:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Arrival.** The headline, a window-shaped aerial photo, and the 3D plane flying in.
+2. **Destinations.** Four editorial chapters with a sticky, crossfading photo stage on desktop and inline images on mobile.
+3. **Planner.** A simulated, rule-based trip sketch (`src/lib/planner.ts`), clearly labelled as such.
+4. **Booking journey.** Choose a place, compare stays, shape the trip, and read a fully itemized example quote. The request dialog sends nothing.
+5. **Behind the experience.** Four system layers, each capability tagged as working on the page, simulated, or built for real agencies. Also a before/after agency workflow.
+6. **Close.** Links to `webbinghub.io/contact` and `webbinghub.io`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Content lives in `src/content`, pure logic in `src/lib`, and sections in `src/components/sections`. Only interactive pieces are client components.
 
-## Deploy on Vercel
+## The airplane
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The source model `src/raw/3dplane.glb` is 3.6 MB, with 71k triangles, 9 meshes, flat-colored materials, no textures and no animations. It is kept untouched.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`node scripts/optimize-plane.mjs` writes `public/models/voyra-plane.glb`. That step drops the unused clearcoat and transmission extensions, welds and simplifies the geometry, then quantizes it with meshopt compression. The result is **123 KB with 13.6k triangles**, with no visible difference at hero size.
+
+Runtime behavior (`src/components/hero-plane`):
+
+- three.js is imported dynamically only after the `load` event and an idle callback, so it never competes with the LCP image.
+- The plane follows a curved path across the photo and settles at the window edge. A coral contrail draws in sync.
+- Rendering happens on demand only: during the arrival, then on pointer movement (fine pointers only) and on scroll while the hero is visible. Idle floating is a CSS transform on the canvas, so it costs no WebGL frames.
+- Device pixel ratio is capped (1.5 on desktop, 1.75 on mobile). The renderer uses `powerPreference: "low-power"`.
+- Reduced motion, Save-Data, no WebGL or no JavaScript all show a pre-rendered poster (`public/images/voyra-plane.webp`, 23 KB) instead, and three.js is never downloaded.
+
+## Images
+
+Photos come from Unsplash under the Unsplash License, credited in the footer. A custom `next/image` loader (`src/lib/image-loader.ts`) asks Unsplash's CDN for AVIF/WebP at the requested width. The hero uses `<picture>` art direction: a 16:10 crop on small screens, 3:4 on desktop, at high fetch priority.
+
+## Measurements
+
+Measured on a local production build (`next start`), Lighthouse 12.8 in headless Chrome on Windows. The machine was under other load, which mostly shows up as Total Blocking Time noise.
+
+| Run | Performance | Accessibility | Best practices | SEO | LCP | TBT | CLS |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Mobile (default simulated throttling), 5 runs | 75–90, median 89 | 100 | 100 | 100 | 3.5 s | 120–620 ms | 0–0.017 |
+| Desktop preset | 99 | 100 | 100 | 100 | 0.8 s | 10 ms | 0 |
+
+Notes:
+
+- The LCP element is the hero photo. Observed, unthrottled LCP equals first paint (about 0.95 s). The simulated 3.5 s comes from Lighthouse modelling the framework JavaScript (about 157 KB gzipped, mostly React and Next.js) as a dependency of the first paint.
+- Initial JS is about 157 KB gzipped. Page-specific code is about 22 KB. three.js (161 KB gzipped) and the model (123 KB) load only after idle.
+- These are lab numbers, not field Core Web Vitals. Real-user LCP, INP and CLS should be confirmed after deployment.
+
+Verified at 375, 768 and 1440 px wide, with no horizontal overflow. There are no console errors with or without reduced motion. Keyboard checks covered the tabs, steppers, dialog (Escape and focus return) and the mobile menu. Without JavaScript, all content and the static plane render. The planner and booking demos need JavaScript.
+
+## Deployment notes
+
+- Canonical, sitemap and robots point to `https://voyra.webbinghub.io`.
+- `/models/*` and `/images/*` get long cache headers in `next.config.ts`. Rename the model file if it changes.
+- Consider linking to the concept from webbinghub.io once it is live.
