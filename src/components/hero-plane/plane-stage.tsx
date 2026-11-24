@@ -124,12 +124,29 @@ export function PlaneStage() {
         cleanups.push(() => window.removeEventListener("scroll", onScroll));
         onScroll();
 
+        const local = (event: MouseEvent) => {
+          const rect = hero.getBoundingClientRect();
+          return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        };
+        const isControl = (target: EventTarget | null) =>
+          target instanceof Element && target.closest("a, button, input, label, select, textarea") !== null;
+
+        const onClick = (event: MouseEvent) => {
+          if (isControl(event.target)) return;
+          const { x, y } = local(event);
+          if (scene?.hits(x, y)) scene.roll();
+        };
+        hero.addEventListener("click", onClick);
+        cleanups.push(() => hero.removeEventListener("click", onClick));
+
         if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
           const onPointer = (event: PointerEvent) => {
             if (!visible) return;
             const x = (event.clientX / window.innerWidth) * 2 - 1;
             const y = (event.clientY / window.innerHeight) * 2 - 1;
             scene?.pointer(x, y);
+            const point = local(event);
+            hero.style.cursor = !isControl(event.target) && scene?.hits(point.x, point.y) ? "pointer" : "";
           };
           window.addEventListener("pointermove", onPointer, { passive: true });
           cleanups.push(() => window.removeEventListener("pointermove", onPointer));

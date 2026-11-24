@@ -170,6 +170,61 @@
   display: none;
 }
 
+.cloud {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.35) 55%, transparent);
+  filter: blur(6px);
+  will-change: transform;
+}
+
+.cloud-a {
+  top: 14%;
+  left: -10%;
+  width: 46%;
+  height: 11%;
+  opacity: 0.75;
+}
+
+.cloud-b {
+  top: 58%;
+  left: 38%;
+  width: 60%;
+  height: 14%;
+  opacity: 0.55;
+}
+
+.cloud-c {
+  top: 80%;
+  left: -20%;
+  width: 38%;
+  height: 8%;
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cloud-a {
+    animation: cloud-drift 38s linear infinite;
+  }
+
+  .cloud-b {
+    animation: cloud-drift 52s linear -20s infinite;
+  }
+
+  .cloud-c {
+    animation: cloud-drift 44s linear -31s infinite;
+  }
+
+  @keyframes cloud-drift {
+    from {
+      transform: translate3d(-60%, 0, 0);
+    }
+    to {
+      transform: translate3d(220%, -18%, 0);
+    }
+  }
+}
+
 .contrail-path {
   stroke-dasharray: 2 9;
 }

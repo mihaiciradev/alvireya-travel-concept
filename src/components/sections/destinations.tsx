@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { destinations } from "@/content/destinations";
+import { BuildNote } from "../build-note";
 import { DestinationStage } from "../destination-stage";
 import { ArrowRight } from "../icons";
 import { PlanLink } from "../plan-link";
@@ -113,6 +114,10 @@ export function Destinations() {
               </PlanLink>
             </article>
           ))}
+          <BuildNote className="mt-6 lg:mt-0">
+            Each destination is managed by your team in a CMS, published in every language you sell in,
+            and linked to live packages from your suppliers.
+          </BuildNote>
         </div>
       </div>
     </section>

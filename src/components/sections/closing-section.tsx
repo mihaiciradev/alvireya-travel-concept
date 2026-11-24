@@ -2,6 +2,12 @@ import Image from "next/image";
 import { site } from "@/lib/site";
 import { ArrowRight, ArrowUpRight } from "../icons";
 
+const steps = [
+  { title: "A conversation", body: "We learn how your agency sells today: destinations, suppliers, team and tools." },
+  { title: "A clear proposal", body: "A scoped plan for your site and integrations, with a fixed price." },
+  { title: "Build, launch, support", body: "Designed and engineered with you, then supported after launch." },
+];
+
 export function ClosingSection() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="relative overflow-hidden">
@@ -48,10 +54,19 @@ export function ClosingSection() {
               are illustrations. The approach behind it is real.
             </p>
             <p>
-              WebbingHUB designs and engineers travel websites around a specific business: its
-              destinations, its suppliers, its team and the systems it already runs, from supplier APIs
-              to the CRM.
+              WebbingHUB designs and engineers websites for travel agencies, tour operators and DMCs,
+              built around how each business works and connected to the systems it already runs, from
+              supplier APIs to the CRM.
             </p>
+            <ol className="grid gap-6 pt-4 sm:grid-cols-3">
+              {steps.map((step, index) => (
+                <li key={step.title} className="border-t border-dashed border-ink/25 pt-4">
+                  <span className="font-mono text-[0.75rem] text-coral-deep">0{index + 1}</span>
+                  <p className="mt-2 font-medium text-ink">{step.title}</p>
+                  <p className="mt-1 text-[0.9rem] leading-snug text-ink-soft">{step.body}</p>
+                </li>
+              ))}
+            </ol>
           </div>
           <div className="flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-8">
             <a
@@ -63,9 +78,12 @@ export function ClosingSection() {
                 <ArrowRight className="h-5 w-5" />
               </span>
             </a>
+            <p className="text-[0.9rem] text-ink-muted">
+              No pressure, no pitch. You own the code, with no lock-in.
+            </p>
             <a
               href={site.studio.url}
-              className="inline-flex items-center gap-2 border-b border-ink/40 pb-1 text-[0.98rem] text-ink hover:border-ink"
+              className="mt-2 inline-flex items-center gap-2 border-b border-ink/40 pb-1 text-[0.98rem] text-ink hover:border-ink"
             >
               Explore WebbingHUB
               <ArrowUpRight className="h-4 w-4" />

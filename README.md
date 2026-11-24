@@ -47,7 +47,7 @@ The source model `src/raw/3dplane.glb` is 3.6 MB, with 71k triangles, 9 meshes, 
 Runtime behavior (`src/components/hero-plane`):
 
 - three.js is imported dynamically only after the `load` event and an idle callback, so it never competes with the LCP image.
-- The plane follows a curved path across the photo and settles at the window edge. A coral contrail draws in sync.
+- The plane follows a curved path across the photo with a barrel roll mid-flight, then settles at the window edge with a soft spring. A coral contrail draws in sync, and a soft shadow on the page sells the height. Clicking or tapping the plane makes it roll again. Cloud wisps drift across the window in pure CSS.
 - Rendering happens on demand only: during the arrival, then on pointer movement (fine pointers only) and on scroll while the hero is visible. Idle floating is a CSS transform on the canvas, so it costs no WebGL frames.
 - Device pixel ratio is capped (1.5 on desktop, 1.75 on mobile). The renderer uses `powerPreference: "low-power"`.
 - Reduced motion, Save-Data, no WebGL or no JavaScript all show a pre-rendered poster (`public/images/alvireya-plane.webp`, 23 KB) instead, and three.js is never downloaded.

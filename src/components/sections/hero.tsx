@@ -95,15 +95,20 @@ export function Hero() {
                   <source srcSet={photo.mobile} sizes="(min-width: 640px) 92vw, 80vw" />
                   <img {...photo.rest} alt={heroPhoto.alt} className="absolute inset-0 h-full w-full object-cover" />
                 </picture>
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+                  <span className="cloud cloud-a" />
+                  <span className="cloud cloud-b" />
+                  <span className="cloud cloud-c" />
+                </div>
                 <div className="porthole pointer-events-none absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.35),inset_0_30px_60px_-30px_rgba(255,255,255,0.5)]" />
               </div>
             </div>
 
             <div
               data-plane-anchor
-              className="absolute top-[6%] left-[-3%] w-[38%] max-w-[260px] md:top-[10%] md:w-[30%] lg:top-[30%] lg:left-[-30%] lg:w-[50%]"
+              className="absolute top-[6%] left-[-3%] aspect-[4/3] w-[38%] max-w-[260px] md:top-[10%] md:w-[30%] lg:top-[30%] lg:left-[-30%] lg:w-[50%]"
             >
-              <div className="plane-poster aspect-[4/3] bg-[url(/images/alvireya-plane.webp)] bg-contain bg-center bg-no-repeat" />
+              <div className="plane-poster absolute inset-0 bg-[url(/images/alvireya-plane.webp)] bg-contain bg-center bg-no-repeat" />
             </div>
           </div>
           <p className="eyebrow mt-4 hidden text-center text-[0.62rem] text-ink-muted sm:block lg:mt-5 lg:text-right">

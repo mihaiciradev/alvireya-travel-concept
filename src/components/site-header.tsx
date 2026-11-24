@@ -6,7 +6,7 @@ export function SiteHeader() {
   return (
     <header className="site-header fixed inset-x-0 top-0 z-50">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:h-[4.5rem] md:px-10">
-        <a href="#top" className="text-ink" aria-label="ALVIREYA, back to top">
+        <a href="#top" className="flex items-center text-ink" aria-label="ALVIREYA, back to top">
           <AlvireyaLogo />
         </a>
 

@@ -28,7 +28,7 @@ export const layers: Layer[] = [
     summary: "What your customers see, touch and remember.",
     capabilities: [
       { name: "Destination storytelling", detail: "Editorial pages that sell a place, not a product code.", status: "shown" },
-      { name: "SEO and performance engineering", detail: "Server-rendered, fast on mid-range phones, readable by search engines.", status: "shown" },
+      { name: "SEO and performance engineering", detail: "Server-rendered, built to load quickly on phones, and readable by search engines.", status: "shown" },
       { name: "Multilingual websites", detail: "Content, prices and search in every market you sell to.", status: "build" },
       { name: "Customer portals", detail: "Trips, documents, payments and changes in one signed-in place.", status: "build" },
     ],

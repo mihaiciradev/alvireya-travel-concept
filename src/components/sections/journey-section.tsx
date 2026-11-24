@@ -1,3 +1,4 @@
+import { BuildNote } from "../build-note";
 import { JourneyBuilder } from "../journey-builder";
 import { SectionIntro } from "../section-intro";
 
@@ -21,6 +22,11 @@ export function JourneySection() {
         <div className="mt-14 md:mt-20">
           <JourneyBuilder />
         </div>
+        <BuildNote className="mt-14 md:mt-20">
+          Stays and rates come from your connected suppliers, your margins are applied automatically,
+          and your team approves each quote before it goes out. Accepted quotes can move straight into
+          booking and payment.
+        </BuildNote>
       </div>
     </section>
   );

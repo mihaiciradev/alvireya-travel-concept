@@ -52,7 +52,14 @@ export function MobileNav() {
             </li>
           ))}
         </ul>
-        <p className="eyebrow mt-5 text-ink-muted">A travel experience concept by WebbingHUB</p>
+        <a
+          href="#contact"
+          onClick={() => setOpen(false)}
+          className="mt-6 flex h-12 items-center justify-center rounded-full bg-ink text-[0.95rem] font-medium text-paper"
+        >
+          Build yours with WebbingHUB
+        </a>
+        <p className="eyebrow mt-4 text-center text-ink-muted">A travel experience concept by WebbingHUB</p>
       </nav>
     </div>
   );

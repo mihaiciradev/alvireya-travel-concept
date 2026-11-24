@@ -1,3 +1,4 @@
+import { BuildNote } from "../build-note";
 import { Planner } from "../planner";
 import { SectionIntro } from "../section-intro";
 
@@ -22,6 +23,11 @@ export function PlannerSection() {
         <div className="mt-14 md:mt-20">
           <Planner />
         </div>
+        <BuildNote className="mt-14 md:mt-20">
+          An AI assistant grounded in your own trips, partners and rates drafts the sketch. Every
+          request reaches your CRM as a qualified lead with the traveler&rsquo;s preferences already
+          attached, ready for an agent to refine.
+        </BuildNote>
       </div>
     </section>
   );
