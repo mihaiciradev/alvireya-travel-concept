@@ -92,7 +92,8 @@ export function PlaneStage() {
         root.dataset.ready = "true";
 
         await scene.arrive(setTrailProgress);
-        if (!reduceMotion) root.querySelector("[data-float]")?.classList.add("plane-float");
+        const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+        if (!reduceMotion && finePointer) root.querySelector("[data-float]")?.classList.add("plane-float");
 
         const resize = new ResizeObserver(() => {
           layout = measure();
@@ -110,6 +111,22 @@ export function PlaneStage() {
 
         if (reduceMotion) return;
 
+        if (!finePointer) {
+          const syncIdle = () => scene?.idle(visible && document.visibilityState === "visible");
+          const watch = new IntersectionObserver(([entry]) => {
+            visible = entry.isIntersecting;
+            syncIdle();
+          });
+          watch.observe(hero);
+          document.addEventListener("visibilitychange", syncIdle);
+          cleanups.push(() => {
+            watch.disconnect();
+            document.removeEventListener("visibilitychange", syncIdle);
+          });
+          syncIdle();
+          return;
+        }
+
         let ticking = false;
         const onScroll = () => {
           if (!visible || ticking) return;
@@ -125,16 +142,14 @@ export function PlaneStage() {
         cleanups.push(() => window.removeEventListener("scroll", onScroll));
         onScroll();
 
-        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-          const onPointer = (event: PointerEvent) => {
-            if (!visible) return;
-            const x = (event.clientX / window.innerWidth) * 2 - 1;
-            const y = (event.clientY / window.innerHeight) * 2 - 1;
-            scene?.pointer(x, y);
-          };
-          window.addEventListener("pointermove", onPointer, { passive: true });
-          cleanups.push(() => window.removeEventListener("pointermove", onPointer));
-        }
+        const onPointer = (event: PointerEvent) => {
+          if (!visible) return;
+          const x = (event.clientX / window.innerWidth) * 2 - 1;
+          const y = (event.clientY / window.innerHeight) * 2 - 1;
+          scene?.pointer(x, y);
+        };
+        window.addEventListener("pointermove", onPointer, { passive: true });
+        cleanups.push(() => window.removeEventListener("pointermove", onPointer));
       } catch {
         if (!disposed) hero.dataset.plane = "fallback";
       }

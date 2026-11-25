@@ -1,5 +1,5 @@
 import { CanvasTexture, Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
-import { createPlaneRig, MODEL_LENGTH } from "./plane-rig";
+import { createPlaneRig, FACING_LEFT, MODEL_LENGTH } from "./plane-rig";
 
 export type Point = { x: number; y: number };
 
@@ -15,6 +15,7 @@ export type PlaneScene = {
   arrive: (onProgress: (progress: number) => void) => Promise<void>;
   pointer: (x: number, y: number) => void;
   scroll: (progress: number) => void;
+  idle: (enabled: boolean) => void;
   dispose: () => void;
 };
 
@@ -71,7 +72,7 @@ function shadowTexture() {
 
 export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<PlaneScene> {
   const rig = await createPlaneRig(canvas);
-  const { scene, flight, bank } = rig;
+  const { scene, flight, bank, pose } = rig;
 
   const shadowMap = shadowTexture();
   const shadowMaterial = new MeshBasicMaterial({
@@ -93,9 +94,12 @@ export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<Plane
     targetPointerY: 0,
     scroll: 0,
     targetScroll: 0,
+    sway: 0,
+    targetSway: 0,
   };
 
   let frame = 0;
+  let lastRender = 0;
 
   function place(now: number) {
     const elapsed = Number.isNaN(state.arrivalStart) ? 0 : now - state.arrivalStart;
@@ -107,12 +111,18 @@ export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<Plane
 
     const s = state.scroll;
     const size = stage.planeSize;
+    const phase = Math.max(elapsed - ARRIVAL_MS, 0) / 1000;
+    const k = state.sway;
+    const swayBank = Math.sin((phase * Math.PI * 2) / 5.6) * 0.09 * k;
+    const swayNod = Math.sin((phase * Math.PI * 2) / 7.4 + 1.2) * 0.035 * k;
+    const swayYaw = Math.sin((phase * Math.PI * 2) / 9.2 + 0.4) * 0.14 * k;
     const x = position.x + state.pointerX * 16 - s * stage.width * 0.38;
     const y = position.y + state.pointerY * 10 - s * stage.height * 0.55;
 
     flight.position.set(x - stage.width / 2, stage.height / 2 - y, 0);
-    flight.rotation.z = heading - NOSE_UP - s * 0.35 + state.pointerY * 0.06;
-    bank.rotation.x = turn * 1.6 - state.pointerX * 0.18 + s * 0.5;
+    flight.rotation.z = heading - NOSE_UP - s * 0.35 + state.pointerY * 0.06 + swayNod;
+    bank.rotation.x = turn * 1.6 - state.pointerX * 0.18 + s * 0.5 + swayBank;
+    pose.rotation.y = FACING_LEFT + swayYaw;
 
     const scale = (size / MODEL_LENGTH) * (0.55 + 0.45 * t) * (1 - s * 0.25);
     flight.scale.setScalar(scale);
@@ -133,16 +143,24 @@ export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<Plane
 
   function tick(now: number) {
     frame = 0;
+    const swaying = state.targetSway > 0;
+    if (swaying && now - lastRender < 32) {
+      frame = requestAnimationFrame(tick);
+      return;
+    }
+    lastRender = now;
     state.pointerX = damp(state.pointerX, state.targetPointerX, 0.075);
     state.pointerY = damp(state.pointerY, state.targetPointerY, 0.075);
     state.scroll = damp(state.scroll, state.targetScroll, 0.2);
+    state.sway = damp(state.sway, state.targetSway, 0.04);
     const busy = render(now);
 
     const settled =
       Math.abs(state.pointerX - state.targetPointerX) < 0.002 &&
       Math.abs(state.pointerY - state.targetPointerY) < 0.002 &&
-      Math.abs(state.scroll - state.targetScroll) < 0.001;
-    if (busy || !settled) frame = requestAnimationFrame(tick);
+      Math.abs(state.scroll - state.targetScroll) < 0.001 &&
+      Math.abs(state.sway - state.targetSway) < 0.002;
+    if (busy || swaying || !settled) frame = requestAnimationFrame(tick);
   }
 
   function wake() {
@@ -181,6 +199,14 @@ export async function createPlaneScene(canvas: HTMLCanvasElement): Promise<Plane
     },
     scroll(progress) {
       state.targetScroll = progress;
+      wake();
+    },
+    idle(enabled) {
+      state.targetSway = enabled ? 1 : 0;
+      if (!enabled) {
+        state.sway = 0;
+        return;
+      }
       wake();
     },
     dispose() {
