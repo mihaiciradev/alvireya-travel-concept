@@ -127,29 +127,21 @@ export function PlaneStage() {
           return;
         }
 
-        let ticking = false;
-        const onScroll = () => {
-          if (!visible || ticking) return;
-          ticking = true;
-          requestAnimationFrame(() => {
-            ticking = false;
-            const progress = Math.min(Math.max(window.scrollY / layout.height, 0), 1);
-            scene?.scroll(progress);
-            if (svgRef.current) svgRef.current.style.opacity = String(1 - progress * 1.6);
-          });
-        };
-        window.addEventListener("scroll", onScroll, { passive: true });
-        cleanups.push(() => window.removeEventListener("scroll", onScroll));
-        onScroll();
-
+        const clamp = (value: number) => Math.min(Math.max(value, -1), 1);
         const onPointer = (event: PointerEvent) => {
-          if (!visible) return;
-          const x = (event.clientX / window.innerWidth) * 2 - 1;
-          const y = (event.clientY / window.innerHeight) * 2 - 1;
+          if (!visible || event.pointerType !== "mouse") return;
+          const rect = hero.getBoundingClientRect();
+          const x = clamp((event.clientX - rect.left - layout.anchor.x) / (window.innerWidth * 0.45));
+          const y = clamp((event.clientY - rect.top - layout.anchor.y) / (window.innerHeight * 0.45));
           scene?.pointer(x, y);
         };
+        const onLeave = () => scene?.pointer(0, 0);
         window.addEventListener("pointermove", onPointer, { passive: true });
-        cleanups.push(() => window.removeEventListener("pointermove", onPointer));
+        document.documentElement.addEventListener("pointerleave", onLeave);
+        cleanups.push(() => {
+          window.removeEventListener("pointermove", onPointer);
+          document.documentElement.removeEventListener("pointerleave", onLeave);
+        });
       } catch {
         if (!disposed) hero.dataset.plane = "fallback";
       }

@@ -63,15 +63,15 @@ export function Planner() {
     setStatus("thinking");
     setStep(0);
     timers.current = [
-      window.setTimeout(() => setStep(1), 550),
-      window.setTimeout(() => setStep(2), 1100),
+      window.setTimeout(() => setStep(1), 700),
+      window.setTimeout(() => setStep(2), 1450),
       window.setTimeout(() => {
         setResult(next);
         setStatus("done");
         if (window.innerWidth < 1024) {
           resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-      }, 1680),
+      }, 2250),
     ];
   }
 
@@ -207,10 +207,11 @@ export function Planner() {
       </form>
 
       <div ref={resultRef} className="relative mt-24 scroll-mt-36 lg:col-span-7 lg:mt-0">
-        <PlannerMascot status={status} />
+        <PlannerMascot status={status} input={input} />
         <div
           aria-live="polite"
           aria-busy={status === "thinking"}
+          data-sketch-card
           className="relative min-h-[34rem] overflow-hidden rounded-[2rem] bg-paper shadow-[0_50px_90px_-50px_rgba(16,32,47,0.5)] ring-1 ring-ink/5"
         >
           {status === "idle" ? (

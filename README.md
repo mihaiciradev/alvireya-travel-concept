@@ -50,11 +50,11 @@ Runtime behavior (`src/components/hero-plane`):
 
 - three.js is imported dynamically only after the `load` event and an idle callback, so it never competes with the LCP image.
 - The plane glides along a curved path across the photo, banking naturally, and eases into place at the window edge. A coral contrail draws in sync, and a soft shadow on the page sells the height. Cloud wisps drift across the window in pure CSS.
-- Rendering happens on demand only. On desktop that means during the arrival, then on pointer movement and on scroll while the hero is visible, with idle floating done as a CSS transform. On touch devices the plane stays in place after arriving and sways gently in 3D at about 30 fps, only while the hero is on screen.
+- Rendering happens on demand only. On desktop that means during the arrival, then while the plane watches the cursor: it turns its nose toward the pointer, banks and drifts, measured from its own position on screen. Scrolling no longer moves it. Idle floating is a CSS transform. On touch devices the plane stays in place after arriving and sways gently in 3D at about 30 fps, only while the hero is on screen.
 - Device pixel ratio is capped (1.5 on desktop, 1.75 on mobile). The renderer uses `powerPreference: "low-power"`.
-- With reduced motion, the single three-second arrival still plays, but pointer-follow, scroll drift, floating and drifting clouds are switched off. Save-Data, no WebGL or no JavaScript show a pre-rendered poster (`public/images/alvireya-plane.webp`, 23 KB) instead, and three.js is never downloaded.
+- With reduced motion, the single three-second arrival still plays, but cursor-watching, floating and drifting clouds are switched off. Save-Data, no WebGL or no JavaScript show a pre-rendered poster (`public/images/alvireya-plane.webp`, 23 KB) instead, and three.js is never downloaded.
 
-The same plane returns as the site's mascot in the planner (`src/components/planner-mascot.tsx`). It perches on the corner of the journey-sketch card, glides across while a sketch is drafted, and turns to face the result. It loads only when the planner is near the viewport, shares the rig in `plane-rig.ts`, and renders only while it moves. With reduced motion it stays perched.
+The same plane returns as the site's mascot in the planner (`src/components/planner-mascot.tsx`). It perches on the corner of the journey-sketch card and watches the cursor while you are in the section, hops whenever a choice changes, and on "Sketch my journey" dives through the card drawing a dotted coral flight line, the "first lines" the card promises, before landing on the opposite corner facing the result. It loads only when the planner is near the viewport, shares the rig in `plane-rig.ts`, and renders only while it moves. With reduced motion it stays perched.
 
 ## Images
 
