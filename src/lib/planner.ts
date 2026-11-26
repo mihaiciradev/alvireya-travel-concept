@@ -291,6 +291,18 @@ function formatList(items: string[]) {
   return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
-export function destinationHighlights(id: DestinationId) {
-  return profiles[id].middle.map((item) => item.title);
+export function outlineFor(id: DestinationId, focus: Interest[] = []): PlannerDay[] {
+  const profile = profiles[id];
+  const preferred = profile.middle.filter((item) => focus.includes(item.tag));
+  const others = profile.middle.filter((item) => !focus.includes(item.tag));
+  const labels = ["Day 2", "Day 3", "Day 4"];
+  return [
+    profile.arrival,
+    ...[...preferred, ...others].slice(0, 3).map(({ title, detail }, index) => ({ label: labels[index], title, detail })),
+    { ...profile.departure, label: "Day 5" },
+  ];
+}
+
+export function seasonNoteFor(id: DestinationId, season: Season) {
+  return profiles[id].seasonNote[season];
 }

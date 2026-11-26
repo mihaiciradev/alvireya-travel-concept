@@ -1,6 +1,6 @@
 import { getImageProps } from "next/image";
 import { heroPhoto } from "@/content/destinations";
-import { Concierge } from "../concierge/concierge";
+import { ConciergeInvite } from "../concierge/concierge-invite";
 import { PlaneStage } from "../hero-plane/plane-stage";
 import { BoardingDestination, HeroWindowCaption, HeroWindowView } from "../hero-window";
 import { ArrowDown } from "../icons";
@@ -57,18 +57,14 @@ export function Hero() {
             <br className="hidden sm:block" /> than it looks.
           </h1>
 
-          <div className="hero-lede order-3">
-            <div className="overflow-hidden">
-              <p className="hero-rise-late mt-6 max-w-[34rem] text-[1.02rem] leading-relaxed text-ink-soft md:mt-7 md:text-[1.15rem]">
-                Tell ALVIREYA how you want the trip to feel. It answers like a good travel designer would,
-                then hands you the details.
-              </p>
-            </div>
-          </div>
+          <p className="hero-rise-late order-3 mt-6 hidden max-w-[34rem] text-[1.02rem] leading-relaxed text-ink-soft sm:block md:mt-7 md:text-[1.15rem]">
+            Tell ALVIREYA how you want the trip to feel. The concierge listens like a good travel designer,
+            then hands you places, days and a brief.
+          </p>
 
           <div className="hero-rise-late order-4 mt-7 md:mt-8 lg:max-w-[min(38rem,calc(45vw-40px))]">
-            <Concierge />
-            <div className="hero-links mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-[0.88rem] text-ink-soft">
+            <ConciergeInvite />
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[0.88rem] text-ink-soft">
               <a href="#destinations" className="inline-flex items-center gap-1.5 underline-offset-4 hover:text-ink hover:underline">
                 Browse the four destinations
                 <ArrowDown className="h-3.5 w-3.5" />

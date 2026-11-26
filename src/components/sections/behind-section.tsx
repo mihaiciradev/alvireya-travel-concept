@@ -7,11 +7,11 @@ import { SectionIntro } from "../section-intro";
 const honesty = [
   {
     title: "Real on this page",
-    body: "The design, the storytelling, the accessibility work and the performance engineering. The hero concierge too: when live replies are on, it is a real AI model with a small daily allowance.",
+    body: "The design, the storytelling, the accessibility work and the performance engineering. Everything you can see and feel.",
   },
   {
     title: "Simulated on this page",
-    body: "The planner logic, the hotels, the prices and the request form. ALVIREYA is not connected to any supplier, booking system or CRM.",
+    body: "The concierge conversations, the planner logic, the hotels, the prices and the request form. ALVIREYA is not connected to any AI model, supplier or CRM.",
   },
   {
     title: "What WebbingHUB builds",

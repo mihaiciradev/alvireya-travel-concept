@@ -40,7 +40,7 @@ export const layers: Layer[] = [
     summary: "Logic that turns a vague wish into a concrete proposal.",
     capabilities: [
       { name: "Personalized recommendations", detail: "Here, a fixed set of rules. In production, your inventory and history.", status: "simulated" },
-      { name: "AI travel assistants", detail: "Live in the hero, on a small daily allowance. In production, grounded in your own inventory, with handover to your agents.", status: "shown" },
+      { name: "AI travel concierge", detail: "Here, curated scenarios. In production, live AI grounded in your inventory, with handover to your agents.", status: "simulated" },
       { name: "Automated quotations", detail: "Draft quotes built from live rates and your margins, ready for review.", status: "simulated" },
       { name: "Lead capture and qualification", detail: "Requests arrive structured, scored and routed to the right person.", status: "build" },
     ],

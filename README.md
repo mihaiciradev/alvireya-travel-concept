@@ -2,7 +2,7 @@
 
 A travel experience concept by [WebbingHUB](https://webbinghub.io), built for `alvireya.webbinghub.io`.
 
-ALVIREYA is a fictional travel brand. Destinations are real places, but its hotels, prices, planner logic and request form are illustrations. Nothing on the page connects to a supplier, booking system or CRM. The one live piece is the hero concierge, which calls Claude Haiku when it is switched on and falls back to labelled, rule-based matches when it is not.
+ALVIREYA is a fictional travel brand. Destinations are real places, but its hotels, prices, planner logic and request form are illustrations. Nothing on the page connects to an AI model, supplier, booking system or CRM, and the site needs no environment variables or external services.
 
 ## Running
 
@@ -10,10 +10,9 @@ ALVIREYA is a fictional travel brand. Destinations are real places, but its hote
 npm install
 npm run dev      # http://localhost:3000
 npm run build && npm run start
-npm test         # quota, validation and failure tests (Anthropic is mocked)
+npm test         # concierge scenario and preference tests
 ```
 
-Copy `.env.example` to `.env.local`. For local work without a key or Redis, set `AI_ENABLED=true`, `AI_QUOTA_STORE=memory`, `AI_MOCK_MODEL=true` and a session secret: replies are canned and labelled "Mock reply · dev only". Both shortcuts are ignored in production.
 
 Node 20.9+ is required by Next.js 16.
 
@@ -72,28 +71,22 @@ Measured on a local production build (`next start`), Lighthouse 12.8 in headless
 
 Notes:
 
-- These runs predate the concierge. The LCP element was the hero photo; on mobile it is now the headline. Observed, unthrottled LCP equals first paint (about 0.95 s). The simulated 3.5 s comes from Lighthouse modelling the framework JavaScript (about 157 KB gzipped, mostly React and Next.js) as a dependency of the first paint.
+- These runs predate the concierge. The LCP element was the hero photo. Observed, unthrottled LCP equals first paint (about 0.95 s). The simulated 3.5 s comes from Lighthouse modelling the framework JavaScript (about 157 KB gzipped, mostly React and Next.js) as a dependency of the first paint.
 - Initial JS is about 157 KB gzipped. Page-specific code is about 22 KB. three.js (161 KB gzipped) and the model (123 KB) load only after idle.
 - These are lab numbers, not field Core Web Vitals. Real-user LCP, INP and CLS should be confirmed after deployment.
 
 Verified at 375, 768 and 1440 px wide, with no horizontal overflow. There are no console errors with or without reduced motion. Keyboard checks covered the tabs, steppers, dialog (Escape and focus return) and the mobile menu. Without JavaScript, all content and the static plane render. The planner and booking demos need JavaScript.
 
-## Hero concierge
+## Concierge
 
-The hero's boarding-pass composer is a live travel assistant. Visitors describe a trip; replies stream into a "flight log" in place of the intro copy, the headline steps back, and recommended places arrive as porthole cards. The aircraft window swaps to the first recommendation, and the boarding strip's "To" updates with it. Suggested replies keep the conversation going, and the model can point to the planner, the quote flow or WebbingHUB's contact page.
+An interactive concierge demo that shows what a travel site could do with live AI, without depending on one.
 
-- **Model.** `claude-haiku-5-5` by default (`ANTHROPIC_MODEL`), thinking off, low effort, 350 output tokens, official SDK with retries disabled and a 20 s timeout.
-- **Protocol.** `POST /api/concierge` streams NDJSON. The model may end with control lines (`[[cards: ...]]`, `[[ask: ...]]`, `[[go: ...]]`); the server strips them, validates them against fixed allow-lists and sends typed events. URLs are removed from model text, and the client renders plain React text with only bold and list formatting.
-- **No stored conversations.** History lives in the browser. The server signs each completed turn (HMAC bound to the visitor), so a client cannot forge assistant turns or inject roles; it only accepts `message`, `history` and `proof`.
-- **Cost protection.** All checks run server-side before Anthropic is called, in one atomic Lua script on Upstash Redis: 5 requests per visitor and 10 per IP per rolling 24 h, 100 per UTC day globally, a per-minute burst limit, one in-flight request per visitor and per IP, and a daily spend ceiling. Each request reserves its worst-case cost (estimated input tokens plus the full output cap), then settles to real usage. Failures that Anthropic does not bill are refunded.
-- **Abuse protection.** Signed, HttpOnly, SameSite=Strict visitor cookie issued by `GET /api/concierge`, combined with a hashed IP (raw IPs are not stored). Origin and Sec-Fetch-Site checks, JSON-only bodies under 16 KB, a 500 character message cap, a honeypot field, a minimum dwell time and a scripted-client user-agent filter.
-- **Fails closed.** Without `AI_ENABLED=true`, an API key, a 32+ character `AI_SESSION_SECRET` and a reachable Redis store, the endpoint returns 503 and the hero switches to curated matches from a keyword list, labelled "Curated match · not AI-generated". Daily limits switch to the same mode.
-
-Code: `src/lib/concierge` (config, quota scripts, identity, prompt, directive filter, engine), `src/app/api/concierge/route.ts`, `src/components/concierge`. Tests: `tests/concierge`, which run the real Lua scripts in a Lua VM (fengari) against an in-memory Redis emulator. `redis.live.test.ts` runs the same scripts against the Upstash database in `.env.local` when `LIVE_REDIS=1` is set, under a throwaway `alv:test:*` namespace that it deletes afterwards. It never calls Anthropic.
-
-All keys live under `AI_KEY_PREFIX` (default `alv:ai`, must start with `alv:`). Use another prefix such as `alv:dev` locally so testing never spends production's daily allowance.
-
-On phones the composer sits right under the headline and stays pinned to the bottom of the screen during a conversation; the window and plane follow below it. With the concierge above the fold, the mobile LCP element is now the headline rather than the hero photo.
+- **Invitation.** The hero holds a single field ("Describe your dream holiday") and six feelings with photo thumbnails: romantic, luxury, adventure, beach, family and culture.
+- **Lounge.** Submitting opens a full-screen `<dialog>` that grows out of the hero field like a window opening (a clip-path animation), and contracts back into it on close. One side is a photo stage showing the place under discussion, with a boarding-pass brief that fills in as the visitor talks (feeling, when, travellers, budget). The other side is an editorial conversation: headlines that resolve word by word, postcard destination cards, a five-day sketch drawn from the planner's content, and a brief ready to hand to a travel designer. Mobile uses a photo band above a full-screen conversation.
+- **Logic.** `src/lib/concierge.ts` routes free text to one of six curated scenarios (`src/content/concierge.ts`), answers questions about the four destinations, sketches itineraries and assembles a brief. It reads months, seasons, party and budget from what visitors type, and guides anything outside the collection back to the six feelings. It is deliberately small; there is no language model.
+- **Sales path.** Every place offers a five-day sketch and a quote; "Request a quote" closes the lounge, selects the destination in the booking journey and scrolls there. The hero window and boarding strip follow the conversation, and a "Continue your conversation" link restores it. State is kept for the visit.
+- **Honesty.** The lounge is labelled "Demo" and both the hero and the lounge carry: "Interactive concierge demo. A production version connects to live AI, booking systems and your agency's own inventory."
+- **Access and performance.** Native modal dialog (focus trap, Esc, focus returns to the hero field), polite live announcements, keyboard-reachable everything, and a plain fade with reduced motion. The lounge code loads only on first hover, focus or use of the invitation, and its images load only once it opens.
 
 ## Deployment notes
 
