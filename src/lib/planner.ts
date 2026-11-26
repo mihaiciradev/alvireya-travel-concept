@@ -290,3 +290,7 @@ function formatList(items: string[]) {
   if (items.length <= 1) return items.join("");
   return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
+
+export function destinationHighlights(id: DestinationId) {
+  return profiles[id].middle.map((item) => item.title);
+}
