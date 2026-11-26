@@ -44,9 +44,10 @@ export interface QuotaStore {
   usage(keys: QuotaKeys): Promise<Usage>;
 }
 
-export function quotaKeys(visitorId: string, ipHash: string, now: Date): QuotaKeys {
+export const DEFAULT_KEY_PREFIX = "alv:ai";
+
+export function quotaKeys(visitorId: string, ipHash: string, now: Date, prefix = DEFAULT_KEY_PREFIX): QuotaKeys {
   const day = now.toISOString().slice(0, 10);
-  const prefix = "alv:ai";
   return {
     visitorDay: `${prefix}:v:${visitorId}`,
     ipDay: `${prefix}:ip:${ipHash}`,

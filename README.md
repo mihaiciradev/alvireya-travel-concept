@@ -89,7 +89,9 @@ The hero's boarding-pass composer is a live travel assistant. Visitors describe 
 - **Abuse protection.** Signed, HttpOnly, SameSite=Strict visitor cookie issued by `GET /api/concierge`, combined with a hashed IP (raw IPs are not stored). Origin and Sec-Fetch-Site checks, JSON-only bodies under 16 KB, a 500 character message cap, a honeypot field, a minimum dwell time and a scripted-client user-agent filter.
 - **Fails closed.** Without `AI_ENABLED=true`, an API key, a 32+ character `AI_SESSION_SECRET` and a reachable Redis store, the endpoint returns 503 and the hero switches to curated matches from a keyword list, labelled "Curated match · not AI-generated". Daily limits switch to the same mode.
 
-Code: `src/lib/concierge` (config, quota scripts, identity, prompt, directive filter, engine), `src/app/api/concierge/route.ts`, `src/components/concierge`. Tests: `tests/concierge`, which run the real Lua scripts in a Lua VM (fengari) against an in-memory Redis emulator.
+Code: `src/lib/concierge` (config, quota scripts, identity, prompt, directive filter, engine), `src/app/api/concierge/route.ts`, `src/components/concierge`. Tests: `tests/concierge`, which run the real Lua scripts in a Lua VM (fengari) against an in-memory Redis emulator. `redis.live.test.ts` runs the same scripts against the Upstash database in `.env.local` when `LIVE_REDIS=1` is set, under a throwaway `alv:test:*` namespace that it deletes afterwards. It never calls Anthropic.
+
+All keys live under `AI_KEY_PREFIX` (default `alv:ai`, must start with `alv:`). Use another prefix such as `alv:dev` locally so testing never spends production's daily allowance.
 
 On phones the composer sits right under the headline and stays pinned to the bottom of the screen during a conversation; the window and plane follow below it. With the concierge above the fold, the mobile LCP element is now the headline rather than the hero photo.
 

@@ -369,3 +369,15 @@ describe("chat endpoint", () => {
     expect((await events(await handleChat(chat(cookie, ask("hi")), deps))).at(-1)).toMatchObject({ truncated: true });
   });
 });
+
+describe("key prefix config", () => {
+  it.each([
+    [undefined, "alv:ai"],
+    ["alv:dev", "alv:dev"],
+    ["travel:ai", "alv:ai"],
+    ["alv:", "alv:ai"],
+    ["alv:x*", "alv:ai"],
+  ])("maps %s to %s", (value, expected) => {
+    expect(readConfig({ ...baseEnv, ...(value ? { AI_KEY_PREFIX: value } : {}) }).keyPrefix).toBe(expected);
+  });
+});

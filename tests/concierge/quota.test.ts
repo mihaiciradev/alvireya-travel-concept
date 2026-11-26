@@ -172,3 +172,12 @@ describe("redis store failures", () => {
     await expect(store.usage(quotaKeys("v1", "ip1", new Date()))).rejects.toThrow();
   });
 });
+
+describe("key namespace", () => {
+  it("keeps every ALVIREYA key under its own prefix", () => {
+    const keys = quotaKeys("visitor", "ip", new Date(Date.UTC(2026, 10, 26)));
+    expect(Object.values(keys).every((key) => key.startsWith("alv:ai:"))).toBe(true);
+    const dev = quotaKeys("visitor", "ip", new Date(), "alv:dev");
+    expect(Object.values(dev).every((key) => key.startsWith("alv:dev:"))).toBe(true);
+  });
+});

@@ -163,7 +163,7 @@ export async function handleStatus(request: Request, deps: Deps): Promise<Respon
   }
 
   try {
-    const keys = quotaKeys(visitor.id, hashIp(config.secret, clientIp(request.headers)), new Date(now));
+    const keys = quotaKeys(visitor.id, hashIp(config.secret, clientIp(request.headers)), new Date(now), config.keyPrefix);
     const usage = await store.usage(keys);
     const remaining = Math.max(
       0,
@@ -212,7 +212,7 @@ export async function handleChat(request: Request, deps: Deps): Promise<Response
   if (!parsed) return fail("invalid", 400);
   if (!verifyProof(secret, visitor.id, parsed.turns, parsed.proof)) return fail("invalid", 400);
 
-  const keys = quotaKeys(visitor.id, hashIp(secret, clientIp(request.headers)), new Date(now));
+  const keys = quotaKeys(visitor.id, hashIp(secret, clientIp(request.headers)), new Date(now), config.keyPrefix);
   const provisionalSystem = systemPrompt(config.limits.visitorPerDay);
   let turns = parsed.turns;
   let messages = buildMessages(turns, parsed.message);

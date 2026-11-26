@@ -43,7 +43,7 @@ export function Hero() {
       id="top"
       data-hero
       aria-labelledby="hero-title"
-      className="relative overflow-hidden pt-24 pb-14 md:pt-28 lg:min-h-[max(100svh,760px)] lg:pb-10"
+      className="relative overflow-clip pt-24 pb-14 md:pt-28 lg:min-h-[max(100svh,760px)] lg:pb-10"
     >
       <div className="mx-auto flex max-w-[1440px] flex-col px-5 md:px-10 lg:grid lg:grid-cols-12 lg:gap-6">
         <div className="contents lg:relative lg:z-30 lg:col-span-7 lg:flex lg:flex-col lg:pt-[4vh]">

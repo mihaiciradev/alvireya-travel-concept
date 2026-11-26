@@ -523,7 +523,7 @@ export function Concierge() {
                   key={entry.id}
                   entry={entry}
                   activeWindow={windowId}
-                  latest={entry.id === latestReply}
+                  latest={entry.id === latestReply && live}
                   onAsk={(text) => void send(text)}
                   onRetry={(text) => void send(text)}
                 />

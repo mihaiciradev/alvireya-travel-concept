@@ -7,6 +7,7 @@ export type ConciergeConfig = {
   secret: string | null;
   store: "redis" | "memory" | null;
   redis: { url: string; token: string } | null;
+  keyPrefix: string;
   allowedOrigins: string[];
   limits: {
     visitorPerDay: number;
@@ -67,6 +68,7 @@ export function readConfig(env: Env = process.env): ConciergeConfig {
     secret,
     store,
     redis,
+    keyPrefix: /^alv:[a-z0-9_-]{1,24}$/.test(env.AI_KEY_PREFIX ?? "") ? env.AI_KEY_PREFIX! : "alv:ai",
     allowedOrigins: origins,
     limits: {
       visitorPerDay: int(env.AI_VISITOR_DAILY_LIMIT, 5, 0, 100),

@@ -46,7 +46,7 @@ Never mention the control lines in your prose.`;
 export function systemPrompt(remainingAfter: number) {
   const wrap =
     remainingAfter <= 0
-      ? "This is the visitor's last live reply today. Make it complete and suggest the planner or journey section as a next step."
+      ? "This is the visitor's last live reply today. Make it complete on its own, do not ask a question or offer further help, skip the [[ask]] line, and end with one sentence pointing to the planner or journey section."
       : `The visitor has ${remainingAfter} more live ${remainingAfter === 1 ? "reply" : "replies"} after this one today.`;
   return `${SYSTEM_PROMPT}\n\n${wrap}`;
 }
